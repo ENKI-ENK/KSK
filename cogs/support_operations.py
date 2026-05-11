@@ -34,13 +34,13 @@ class SupportOperations(commands.Cog):
             title=f"{theme.robotIcon} Bot Support Information",
             description=(
                 "If you need help with the bot or are experiencing any issues, "
-                "please feel free to ask on our [Discord](https://discord.gg/apYByj6K2m)\n\n"
+                "please feel free to contact us on Discord: **enki.en**\n\n"
                 "**Additional resources:**\n"
-                "**GitHub Repository:** [Whiteout Project](https://github.com/whiteout-project/bot)\n"
-                "**Issues & Bug Reports:** [GitHub Issues](https://github.com/whiteout-project/bot/issues)\n\n"
-                "This bot is open source and maintained by the WOSLand community. "
+                "**GitHub Repository:** [WOS Project](https://github.com/ENKI-ENK/KSK)\n"
+                "**Issues & Bug Reports:** [GitHub Issues](https://github.com/ENKI-ENK/KSK/issues)\n\n"
+                "This bot is open source and maintained by the KSK Team. "
                 "You can report bugs, request features, or contribute to the project "
-                "through our Discord or GitHub repository.\n\n"
+                "through our GitHub repository.\n\n"
                 "For technical support, please make sure to provide "
                 "detailed information about your problem."
             ),
@@ -81,14 +81,14 @@ class SupportView(discord.ui.View):
     )
     async def about_project_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         about_embed = discord.Embed(
-            title=f"{theme.infoIcon} About Whiteout Project",
+            title=f"{theme.infoIcon} About WOS Project",
             description=(
                 f"**Open Source Bot**\n"
                 f"{theme.upperDivider}\n"
-                f"This is an open source Discord bot for Whiteout Survival.\n"
-                f"The project is community-driven and freely available for everyone.\n"
-                f"**Repository:** [GitHub](https://github.com/whiteout-project/bot)\n"
-                f"**Community:** [Discord](https://discord.gg/apYByj6K2m)\n\n"
+                f"This is an open source Discord bot.\n"
+                f"The project is maintained by the KSK Team and freely available for everyone.\n"
+                f"**Repository:** [GitHub](https://github.com/ENKI-ENK/KSK)\n"
+                f"**Contact:** enki.en on Discord\n\n"
                 f"**Features**\n"
                 f"{theme.middleDivider}\n"
                 f"• Alliance member management\n"
@@ -105,7 +105,7 @@ class SupportView(discord.ui.View):
             color=discord.Color.green()
         )
 
-        about_embed.set_footer(text=f"Made with {theme.heartIcon} by the WOSLand Bot Team.")
+        about_embed.set_footer(text=f"Made with {theme.heartIcon} by the KSK Team.")
         
         try:
             await interaction.response.send_message(embed=about_embed, ephemeral=True)
@@ -132,6 +132,11 @@ class SupportView(discord.ui.View):
                 await interaction.message.edit(content=None, embed=None, view=None)
                 await alliance_cog.show_main_menu(interaction)
             except discord.errors.InteractionResponded:
+                await interaction.message.edit(content=None, embed=None, view=None)
+                await alliance_cog.show_main_menu(interaction)
+
+async def setup(bot):
+    await bot.add_cog(SupportOperations(bot))
                 await interaction.message.edit(content=None, embed=None, view=None)
                 await alliance_cog.show_main_menu(interaction)
 
