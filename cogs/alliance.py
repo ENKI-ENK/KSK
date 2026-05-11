@@ -117,6 +117,18 @@ class Alliance(commands.Cog):
                 ephemeral=True
             )
 
+    @commands.Cog.listener()
+    async def on_message(self, message: discord.Message):
+        if message.author.bot:
+            return
+        if message.content.lower() == "hi ksk":
+            self.c_settings.execute("SELECT id FROM admin WHERE id = ?", (message.author.id,))
+            admin = self.c_settings.fetchone()
+            if admin:
+                await message.reply(f"Hello {message.author.mention}! 👋 Use `/settings` to open the menu.")
+            else:
+                await message.reply(f"Hello {message.author.mention}! 👋 You don't have permission to use the bot.")
+
     @app_commands.command(name="settings", description="Open settings menu.")
     async def settings(self, interaction: discord.Interaction):
         try:
@@ -183,6 +195,8 @@ class Alliance(commands.Cog):
                     f"└ View alliance changes and history\n\n"
                     f"{theme.supportIcon} **Support Operations**\n"
                     f"└ Access support features\n\n"
+                    f"{theme.paletteIcon} **Theme Settings**\n"
+                    f"└ Customize bot icons and colors\n"
                     f"{theme.lowerDivider}"
                 ),
                 color=theme.emColor1
@@ -238,7 +252,13 @@ class Alliance(commands.Cog):
                 custom_id="other_features",
                 row=3
             ))
-
+            view.add_item(discord.ui.Button(
+                label="Theme Settings",
+                emoji=f"{theme.paletteIcon}",
+                style=discord.ButtonStyle.primary,
+                custom_id="theme_settings",
+                row=3
+            ))
 
             if admin_count == 0:
                 await interaction.edit_original_response(embed=embed, view=view)
@@ -275,6 +295,8 @@ class Alliance(commands.Cog):
                     f"└ View alliance changes and history\n\n"
                     f"{theme.supportIcon} **Support Operations**\n"
                     f"└ Access support features\n\n"
+                    f"{theme.paletteIcon} **Theme Settings**\n"
+                    f"└ Customize bot icons and colors\n"
                     f"{theme.lowerDivider}"
                 ),
                 color=theme.emColor1
@@ -330,7 +352,13 @@ class Alliance(commands.Cog):
                 custom_id="other_features",
                 row=3
             ))
-
+            view.add_item(discord.ui.Button(
+                label="Theme Settings",
+                emoji=f"{theme.paletteIcon}",
+                style=discord.ButtonStyle.primary,
+                custom_id="theme_settings",
+                row=3
+            ))
 
             try:
                 await interaction.response.edit_message(embed=embed, view=view)
@@ -718,6 +746,30 @@ class Alliance(commands.Cog):
                         else:
                             await interaction.followup.send(
                                 "An error occurred while loading Other Features menu.",
+                                ephemeral=True
+                            )
+
+                elif custom_id == "theme_settings":
+                    try:
+                        theme_cog = interaction.client.get_cog("Theme")
+                        if theme_cog:
+                            await theme_cog.show_theme_menu(interaction)
+                        else:
+                            await interaction.response.send_message(
+                                f"{theme.deniedIcon} Theme module not found.",
+                                ephemeral=True
+                            )
+                    except Exception as e:
+                        if not any(error_code in str(e) for error_code in ["10062", "40060"]):
+                            print(f"Theme settings error: {e}")
+                        if not interaction.response.is_done():
+                            await interaction.response.send_message(
+                                "An error occurred while loading Theme settings.",
+                                ephemeral=True
+                            )
+                        else:
+                            await interaction.followup.send(
+                                "An error occurred while loading Theme settings.",
                                 ephemeral=True
                             )
 
