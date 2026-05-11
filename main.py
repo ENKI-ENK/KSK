@@ -347,14 +347,7 @@ UPDATE_SOURCES = [
         "name": "GitHub",
         "api_url": "https://api.github.com/repos/ENKI-ENK/KSK/releases/latest",
         "primary": True
-    },
-    {
-        "name": "GitLab",
-        "api_url": "https://gitlab.whiteout-bot.com/api/v4/projects/1/releases",
-        "project_id": 1,
-        "primary": False
     }
-    # Can add more sources here as needed
 ]
 
 def get_latest_release_info(beta_mode=False):
@@ -392,22 +385,6 @@ def get_latest_release_info(beta_mode=False):
                             "source": source['name']
                         }
                     
-            elif source['name'] == "GitLab":
-                response = requests.get(source['api_url'], timeout=30)
-                if response.status_code == 200:
-                    releases = response.json()
-                    if releases:
-                        latest = releases[0]  # GitLab returns array, first is latest
-                        tag_name = latest['tag_name']
-                        # Use GitLab's source archive
-                        download_url = f"https://gitlab.whiteout-bot.com/ENKI-ENK/KSK/-/archive/{tag_name}/bot-{tag_name}.zip"
-                        return {
-                            "tag_name": tag_name,
-                            "body": latest.get("description", "No release notes available"),
-                            "download_url": download_url,
-                            "source": source['name']
-                        }
-            
             # Add handling for other sources here
             
         except requests.exceptions.RequestException as e:
@@ -452,11 +429,6 @@ def download_requirements_from_release(beta_mode=False):
             raw_url = "https://raw.githubusercontent.com/ENKI-ENK/KSK/main/requirements.txt"
         else:
             raw_url = f"https://raw.githubusercontent.com/ENKI-ENK/KSK/refs/tags/{tag}/requirements.txt"
-    elif source_name == "GitLab":
-        if beta_mode:
-            raw_url = "https://gitlab.whiteout-bot.com/ENKI-ENK/KSK/-/raw/main/requirements.txt"
-        else:
-            raw_url = f"https://gitlab.whiteout-bot.com/ENKI-ENK/KSK/-/raw/{tag}/requirements.txt"
     else:
         print(f"Unknown source: {source_name}")
         return False
@@ -1332,6 +1304,3 @@ if __name__ == "__main__":
 
     if __name__ == "__main__":
         run_bot()
-
-
-        
