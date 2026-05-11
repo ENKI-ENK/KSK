@@ -124,10 +124,43 @@ class Alliance(commands.Cog):
         if message.content.lower() == "hi ksk":
             self.c_settings.execute("SELECT id FROM admin WHERE id = ?", (message.author.id,))
             admin = self.c_settings.fetchone()
-            if admin:
-                await message.reply(f"Hello {message.author.mention}! 👋 Use `/settings` to open the menu.")
-            else:
-                await message.reply(f"Hello {message.author.mention}! 👋 You don't have permission to use the bot.")
+            if admin is None:
+                await message.reply(f"You do not have permission to access this menu.", delete_after=5)
+                return
+            try:
+                embed = discord.Embed(
+                    title=f"{theme.settingsIcon} Settings Menu",
+                    description=(
+                        f"Please select a category:\n\n"
+                        f"**Menu Categories**\n"
+                        f"{theme.upperDivider}\n"
+                        f"{theme.allianceIcon} **Alliance Operations**\n"
+                        f"└ Manage alliances and settings\n\n"
+                        f"{theme.membersIcon} **Alliance Member Operations**\n"
+                        f"└ Add, remove, and view members\n\n"
+                        f"{theme.robotIcon} **Bot Operations**\n"
+                        f"└ Configure bot settings\n\n"
+                        f"{theme.giftIcon} **Gift Code Operations**\n"
+                        f"└ Manage gift codes and rewards\n\n"
+                        f"{theme.listIcon} **Alliance History**\n"
+                        f"└ View alliance changes and history\n\n"
+                        f"{theme.supportIcon} **Support Operations**\n"
+                        f"└ Access support features\n\n"
+                        f"{theme.lowerDivider}"
+                    ),
+                    color=theme.emColor1
+                )
+                view = discord.ui.View()
+                view.add_item(discord.ui.Button(label="Alliance Operations", emoji=theme.allianceIcon, style=discord.ButtonStyle.primary, custom_id="alliance_operations", row=0))
+                view.add_item(discord.ui.Button(label="Member Operations", emoji=theme.membersIcon, style=discord.ButtonStyle.primary, custom_id="member_operations", row=0))
+                view.add_item(discord.ui.Button(label="Bot Operations", emoji=theme.robotIcon, style=discord.ButtonStyle.primary, custom_id="bot_operations", row=1))
+                view.add_item(discord.ui.Button(label="Gift Operations", emoji=theme.giftIcon, style=discord.ButtonStyle.primary, custom_id="gift_code_operations", row=1))
+                view.add_item(discord.ui.Button(label="Alliance History", emoji=theme.listIcon, style=discord.ButtonStyle.primary, custom_id="alliance_history", row=2))
+                view.add_item(discord.ui.Button(label="Support Operations", emoji=theme.supportIcon, style=discord.ButtonStyle.primary, custom_id="support_operations", row=2))
+                view.add_item(discord.ui.Button(label="Other Features", emoji=theme.settingsIcon, style=discord.ButtonStyle.primary, custom_id="other_features", row=3))
+                await message.reply(embed=embed, view=view)
+            except Exception as e:
+                print(f"hi ksk error: {e}")
 
     @app_commands.command(name="settings", description="Open settings menu.")
     async def settings(self, interaction: discord.Interaction):
