@@ -171,7 +171,3 @@ class GNCommands(commands.Cog):
 
 async def setup(bot):
     await bot.add_cog(GNCommands(bot))
-        )
-
-async def setup(bot):
-    await bot.add_cog(GNCommands(bot))
