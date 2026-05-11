@@ -137,8 +137,3 @@ class SupportView(discord.ui.View):
 
 async def setup(bot):
     await bot.add_cog(SupportOperations(bot))
-                await interaction.message.edit(content=None, embed=None, view=None)
-                await alliance_cog.show_main_menu(interaction)
-
-async def setup(bot):
-    await bot.add_cog(SupportOperations(bot))
