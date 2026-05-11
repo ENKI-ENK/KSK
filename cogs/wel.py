@@ -65,15 +65,15 @@ class GNCommands(commands.Cog):
                     status_embed.add_field(
                         name=f"{theme.pinIcon} Community & Support",
                         value=(
-                            f"**GitHub Repository:** [Whiteout Project](https://github.com/whiteout-project/bot)\n"
-                            f"**Discord Community:** [Join our Discord](https://discord.gg/apYByj6K2m)\n"
-                            f"**Bug Reports:** [GitHub Issues](https://github.com/whiteout-project/bot/issues)\n"
+                            f"**GitHub Repository:** [WOS Project](https://github.com/ENKI-ENK/KSK)\n"
+                            f"**Contact:** enki.en on Discord\n"
+                            f"**Bug Reports:** [GitHub Issues](https://github.com/ENKI-ENK/KSK/issues)\n"
                             f"{theme.lowerDivider}"
                         ),
                         inline=False
                     )
 
-                    status_embed.set_footer(text="Thanks for using the bot! Maintained with ❤️ by the WOSLand Bot Team.")
+                    status_embed.set_footer(text="Thanks for using the bot! Maintained with ❤️ by the KSK Team.")
 
                     await admin_user.send(embed=status_embed)
 
@@ -167,6 +167,10 @@ class GNCommands(commands.Cog):
         await interaction.response.send_message(
             f"The ID of the selected channel is: {channel.id}",
             ephemeral=True
+        )
+
+async def setup(bot):
+    await bot.add_cog(GNCommands(bot))
         )
 
 async def setup(bot):
